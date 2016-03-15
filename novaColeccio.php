@@ -13,4 +13,5 @@ $sql = "INSERT INTO COLLECCIONS
 VALUES ('$coleccio');";
 
 $cursor = $mysqli->query($sql) or die("Error sql:$sql");
+
 echo "OK";

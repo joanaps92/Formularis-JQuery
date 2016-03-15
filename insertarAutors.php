@@ -6,8 +6,14 @@ if (mysqli_connect_errno()) {
     printf("Error: %s\n", mysqli_connect_errno());
     exit();
 }
-$codiLlibre = $_POST["llibre"];
-$codiAutor = $_POST["autor"];
-$sql = "DELETE FROM LLI_AUT WHERE FK_IDLLIB = '$codiLlibre' AND FK_IDAUT = '$codiAutor'";
+
+$autor = $_POST["autor"];
+$llibre = $_POST["llibre"];
+
+$sql = "INSERT INTO LLI_AUT (FK_IDLLIB, FK_IDAUT)
+VALUES ($llibre, $autor)";
+       
 $cursor = $mysqli->query($sql) or die("Error sql:$sql");
+
+
 echo "OK";

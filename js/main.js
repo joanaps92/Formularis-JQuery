@@ -8,26 +8,30 @@ $(document).ready(function () {
     $("#boto_afegir").click(function () {
         $("#boto_afegir").hide();
         $("#ocult").show();
+        introduirAutors();
+    });
+    
+    $("#inserirAutor").click(function () {
+        insertarAutor();
     });
     
     $("#cancelaAutor").click(function () {
         $("#ocult").hide();
         $("#boto_afegir").show();
     });
-    
-    $("#guardaAutor").click(function(){
+
+    $("#guardaAutor").click(function () {
         afegirAutor();
     });
-    
-    
+
+
     $("#afegir_col").click(function () {
         afegirColeccio($("#col").val());
     });
 
-    $("button").click(function () {
+//    $("button").click(function () {
 //        borrarAutor($("#codi").val(), $(this).val());
-        desactivar_Edicio();
-    });
+//    });
 
     $("#col").autocomplete(
             {
@@ -37,6 +41,40 @@ $(document).ready(function () {
     );
 
 });
+function insertarAutor(){
+    var autor = $("#selectAutors").val();
+    var llibre = $("#codi").val();
+    $.ajax({
+       url: "insertarAutors.php",
+       type: "POST",
+       data: {
+           llibre: llibre,
+           autor: autor
+       },
+       success: function(){
+            mostraAutors();
+       }
+    });
+}
+
+function introduirAutors() {
+    $.ajax({
+        url: "llistaAutors.php",
+        type: "POST",
+        success: function (resposta) {
+            var index = 0;
+            for (var key in resposta) {
+                $("<option>").attr("id", "aut" + index).val(resposta[key].ID_AUT).text(resposta[key].NOM_AUT).appendTo($("#selectAutors"));
+                index++;
+            }
+            insertarAutor();
+        },
+        error: function(){
+            
+        }
+    });
+}
+
 function afegirAutor() {
     var nom = $("#nom").val();
     var nacio = $("#nacionalitat").val();
@@ -52,11 +90,6 @@ function afegirAutor() {
         },
         success: function () {
             alert("AFEGIT");
-            $("#ocult").hide();
-            $("#guardaAutor").prop("disabled", true);
-            $("#cancelaAutor").prop("disabled", true);
-            $("#guardaAutor").hide();
-            $("#cancelaAutor").hide();
             mostraAutors();
         },
         error: function () {
@@ -67,14 +100,16 @@ function afegirAutor() {
 
 function borrarAutor(llibre, autor) {
     $.ajax({
-        url: "algo.php",
+        url: "borrarAutor.php",
         type: "POST",
         data: {
             llibre: llibre,
             autor: autor
         },
-        succes: function () {
-            alert("Borrat autor amb id " + autor + " del llibre amb id " + llibre);
+        success: function () {
+            alert("DELETE FROM LLI_AUT WHERE FK_IDLLIB = " + llibre + " AND FK_IDAUT = " + autor);
+            mostraAutors();
+            activar_Edicio();
         },
         error: function () {
             alert("No s'ha pogut borratr l'autor amb id " + autor + " del llibre amb id " + llibre);
@@ -98,6 +133,7 @@ function afegirColeccio(coleccio) {
     });
 }
 function mostraAutors() {
+    netetjaAutors();
     var codi = $("#codi").val();
     $.ajax({
         url: "mostraAutors.php",
@@ -110,18 +146,20 @@ function mostraAutors() {
                 var id = resposta[key].ID_AUT;
                 var nom = resposta[key].NOM_AUT;
                 var taula = $("#taula_autors");
-                $('<tr>').attr("id", "tr_" + i).appendTo(taula);
+                $('<tr>').attr("id", "tr_" + i).appendTo(taula).attr("class", "autor");
                 $('<td>').text(id).appendTo('#tr_' + i);
                 $('<td>').text(nom).appendTo('#tr_' + i);
                 $('<td>').attr("id", "BorrarAutor_" + i).appendTo('#tr_' + i);
-                $('<button>').text("Borrar").attr("type", "button").attr("id", resposta[key].ID_AUT).appendTo("#BorrarAutor_" + i).attr("disabled", "true").attr("class", "botoBorrar").val(resposta[key].ID_AUT);
+                $('<button>').text("Borrar").attr("type", "button").attr("id", resposta[key].ID_AUT).appendTo("#BorrarAutor_" + i).attr("class", "botoBorrar").val(resposta[key].ID_AUT).bind("click", function () {
+                    borrarAutor($("#codi").val(), $(this).val());
+                });
                 i++;
             }
-            $('<tr>').attr("id", "BotonsAutor").attr("class", "ocult").appendTo(taula);
-            $('<td>').attr("id", "GuardaAutor").appendTo("#BotonsAutor");
-            $('<button>').text("Guardar").attr("type", "button").attr("id", "GuardarButton").appendTo("#GuardaAutor").attr("disabled", "true");
-            $('<td>').attr("id", "CancelaAutor").appendTo("#BotonsAutor");
-            $('<button>').text("Cancelar").attr("type", "button").attr("id", "CancelaButton").appendTo("#CancelaAutor").attr("disabled", "true").bind("click",function () { alert("www"); });
+//            $('<tr>').attr("id", "BotonsAutor").attr("class", "ocult autor").appendTo(taula);
+//            $('<td>').attr("id", "GuardaAutor").appendTo("#BotonsAutor");
+//            $('<button>').text("Guardar").attr("type", "button").attr("id", "GuardarButton").appendTo("#GuardaAutor");
+//            $('<td>').attr("id", "CancelaAutor").appendTo("#BotonsAutor");
+//            $('<button>').text("Cancelar").attr("type", "button").attr("id", "CancelaButton").appendTo("#CancelaAutor");
         },
         error: function () {
 
@@ -160,4 +198,8 @@ function validar() {
         return false;
     }
     return true;
+}
+
+function netetjaAutors() {
+    $(".autor").remove();
 }
