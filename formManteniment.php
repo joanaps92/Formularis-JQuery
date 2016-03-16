@@ -193,36 +193,37 @@ foreach ($_GET as $key => $value) {
                                 <label for="selectAutors">Afegir Autor: </label>
                                 <select id="selectAutors" name="selectAutors">
                                     <option value="null">Sel·lecciona un autor</option>
-                            </select>
+                                </select>
                                 <button id="inserirAutor" type="button" class="">Insereix Autor</button>
+                            </div>
                         </div>
-                    </div>
-                    <table id="taula_autors">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>NOM</th>
-                                <th></th>
+                        <table id="taula_autors">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>NOM</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="body_table">
+
+                            </tbody>
+                        </table>
+                        <!--<table>
+                            <tr class="trOcult">
+                                <td>
+                                    <button id="guardaAutor" type='button'>GUARDA</button>
+                                </td>
+                                <td>
+                                    <button id="cancelaAutor" type="button">CANCELA</button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody id="body_table">
-
-                        </tbody>
-                    </table>
-                    <!--<table>
-                        <tr class="trOcult">
-                            <td>
-                                <button id="guardaAutor" type='button'>GUARDA</button>
-                            </td>
-                            <td>
-                                <button id="cancelaAutor" type="button">CANCELA</button>
-                            </td>
-                        </tr>
-
-                    </table>-->
-                </div>
-            </fieldset>
-        </form>
-    </div>
-</body>
+    
+                        </table>-->
+                    </div>
+                </fieldset>
+            </form>
+            <button id="guardarCanvis" type="button">Guardar Canvis</button>
+        </div>
+    </body>
 </html>

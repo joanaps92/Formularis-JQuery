@@ -10,11 +10,11 @@ $(document).ready(function () {
         $("#ocult").show();
         introduirAutors();
     });
-    
+
     $("#inserirAutor").click(function () {
         insertarAutor();
     });
-    
+
     $("#cancelaAutor").click(function () {
         $("#ocult").hide();
         $("#boto_afegir").show();
@@ -27,6 +27,10 @@ $(document).ready(function () {
 
     $("#afegir_col").click(function () {
         afegirColeccio($("#col").val());
+    });
+    
+    $("#guardarCanvis").click(function(){
+        updateLlibre();
     });
 
 //    $("button").click(function () {
@@ -41,19 +45,63 @@ $(document).ready(function () {
     );
 
 });
-function insertarAutor(){
+
+function updateLlibre() {
+    var codi = $("#codi").val();
+    var titol = $("#titol").val();
+    var nEdicio = $("#nEdicio").val();
+    var any = $("#any").val();
+    var lloc = $("#lloc").val();
+    var desc = $("#desc").val();
+    var isbn = $("#isbn").val();
+    var legal = $("#legal").val();
+    var sig = $("#sig").val();
+    var col = $("#col").val();
+    var dep = $("#dep").val();
+    var edi = $("#edi").val();
+    var llen = $("#llen").val();
+    $.ajax({
+        url: "updateLlibre.php",
+        type: "POST",
+        data: {
+            codi: codi,
+            titol: titol,
+            nEdicio: nEdicio,
+            any: any,
+            lloc: lloc,
+            desc: desc,
+            isbn: isbn,
+            legal: legal,
+            sig: sig,
+            col: col,
+            dep: dep,
+            edi: edi,
+            llen: llen
+        },
+        success: function () {
+            alert("Llibre actualitzat");
+            //
+            //location.reload();
+        },
+        error: function () {
+            alert("No s'ha pogut actualitzar");
+        }
+    });
+}
+
+function insertarAutor() {
     var autor = $("#selectAutors").val();
     var llibre = $("#codi").val();
     $.ajax({
-       url: "insertarAutors.php",
-       type: "POST",
-       data: {
-           llibre: llibre,
-           autor: autor
-       },
-       success: function(){
+        url: "insertarAutors.php",
+        type: "POST",
+        data: {
+            llibre: llibre,
+            autor: autor
+        },
+        success: function () {
             mostraAutors();
-       }
+        }
     });
 }
 
@@ -69,8 +117,8 @@ function introduirAutors() {
             }
             insertarAutor();
         },
-        error: function(){
-            
+        error: function () {
+
         }
     });
 }
